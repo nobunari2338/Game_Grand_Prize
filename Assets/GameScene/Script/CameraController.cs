@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour
 //**********************************************************************
 
 	// 定数
+	const float STICK_SENSITIVITY = 0.0001f;
 	const float TRANSLATION_SPEED = 0.3f;
 	const float ROTATE_SPEED      = 1.5f;
 
@@ -192,39 +193,33 @@ public class CameraController : MonoBehaviour
 
 	void Translation()
 	{
-		const float STICK_SENSITIVITY = 0.0001f;
-		const float MAX_SPEED = 0.3f;
-
 		Vector3 temp_vector = new Vector3(0.0f, 0.0f, 0.0f);
 
-		if (Input.GetKey(KeyCode.A) || (Input.GetAxis("Horizontal") < -STICK_SENSITIVITY))
+		if (Input.GetKey(KeyCode.A) || (Input.GetAxis("LStick_X") < -STICK_SENSITIVITY))
 		{
 			temp_vector.x = -1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.D) || (Input.GetAxis("Horizontal") > STICK_SENSITIVITY))
+		if (Input.GetKey(KeyCode.D) || (Input.GetAxis("LStick_X") > STICK_SENSITIVITY))
 		{
 			temp_vector.x = 1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.W) || (Input.GetAxis("Vertical") > STICK_SENSITIVITY))
+		if (Input.GetKey(KeyCode.W) || (Input.GetAxis("LStick_Z") < -STICK_SENSITIVITY))
 		{
 			temp_vector.z = 1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.S) || (Input.GetAxis("Vertical") < -STICK_SENSITIVITY))
+		if (Input.GetKey(KeyCode.S) || (Input.GetAxis("LStick_Z") > STICK_SENSITIVITY))
 		{
 			temp_vector.z = -1.0f;
-
-			
-			
 		}
 
 		// 速度ベクトルの調整
 		temp_vector.Normalize();
-		float proportion = (Mathf.Abs(Input.GetAxis("Vertical")) > Mathf.Abs(Input.GetAxis("Horizontal"))? 
-							Mathf.Abs(Input.GetAxis("Vertical")) : Mathf.Abs(Input.GetAxis("Horizontal")));
-		temp_vector = temp_vector * MAX_SPEED * proportion ;
+		float proportion = (Mathf.Abs(Input.GetAxis("LStick_Z")) > Mathf.Abs(Input.GetAxis("LStick_X"))? 
+							Mathf.Abs(Input.GetAxis("LStick_Z")) : Mathf.Abs(Input.GetAxis("LStick_X")));
+		temp_vector = temp_vector * TRANSLATION_SPEED * proportion ;
 
 		// Y座標は固定
 		float temp_y = transform.position.y;
@@ -242,24 +237,31 @@ public class CameraController : MonoBehaviour
 
 	void Rotation()
 	{
-		if (Input.GetKey(KeyCode.Q))
+		// 速度の調整
+		float temp_speed = ROTATE_SPEED * 
+						   (Mathf.Abs(Input.GetAxis("RStick_Z")) > Mathf.Abs(Input.GetAxis("RStick_X"))? 
+							Mathf.Abs(Input.GetAxis("RStick_Z")) : Mathf.Abs(Input.GetAxis("RStick_X")));
+		
+
+
+		if (Input.GetKey(KeyCode.Q) || (Input.GetAxis("RStick_X") < -STICK_SENSITIVITY))
 		{
-			transform.Rotate(0.0f, -ROTATE_SPEED, 0.0f, Space.World);
+			transform.Rotate(0.0f, -temp_speed, 0.0f, Space.World);
 		}
 
-		if (Input.GetKey(KeyCode.E))
+		if (Input.GetKey(KeyCode.E) || (Input.GetAxis("RStick_X") > STICK_SENSITIVITY))
 		{
-			transform.Rotate(0.0f, ROTATE_SPEED, 0.0f, Space.World);
+			transform.Rotate(0.0f, temp_speed, 0.0f, Space.World);
 		}
 
-		if (Input.GetKey(KeyCode.R))
+		if (Input.GetKey(KeyCode.R) || (Input.GetAxis("RStick_Z") < -STICK_SENSITIVITY))
 		{
-			transform.Rotate(-ROTATE_SPEED, 0.0f, 0.0f);
+			transform.Rotate(-temp_speed, 0.0f, 0.0f);
 		}
 
-		if (Input.GetKey(KeyCode.F))
+		if (Input.GetKey(KeyCode.F) || (Input.GetAxis("RStick_Z") > STICK_SENSITIVITY))
 		{
-			transform.Rotate(ROTATE_SPEED, 0.0f, 0.0f);
+			transform.Rotate(temp_speed, 0.0f, 0.0f);
 		}
 	}
 
