@@ -31,9 +31,10 @@ public class CameraController : MonoBehaviour
 //**********************************************************************
 
 	// 定数
-	const float STICK_SENSITIVITY = 0.0001f;
-	const float TRANSLATION_SPEED = 0.3f;
-	const float ROTATE_SPEED      = 1.5f;
+	const float STICK_SENSITIVITY   = 0.0001f;
+	const float TRIGGER_SENSITIVITY = 0.1f;
+	const float TRANSLATION_SPEED   = 0.3f;
+	const float ROTATE_SPEED        = 1.5f;
 
 
 	// カメラの座標保存
@@ -157,7 +158,7 @@ public class CameraController : MonoBehaviour
 		Rotation();
 
 		// 時間調整へ移行
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.Space)|| Input.GetButtonDown("A"))//Input.GetAxisRaw("R2") < -TRIGGER_SENSITIVITY)
 		{
 			ChangeTimerCamera_TimeAdjustment();
 		}
@@ -177,7 +178,7 @@ public class CameraController : MonoBehaviour
 		SetTimer();
 
 		// メインカメラへ移行
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("A"))//Input.GetAxisRaw("R2") < -TRIGGER_SENSITIVITY)
 		{
 			ChangeMainCamera();
 		}
@@ -287,7 +288,7 @@ public class CameraController : MonoBehaviour
 			hit.collider.gameObject.GetComponent<ItemTileController>().is_hit_ = true;
 
 			// アイテム使用
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("A"))//Input.GetAxisRaw("R2") < -TRIGGER_SENSITIVITY)
 			{
 				item_generator_.GetComponent<ItemGenerator>().UseItem(hit.collider.gameObject);
 			}
@@ -306,12 +307,12 @@ public class CameraController : MonoBehaviour
 
 	void SelectItem()
 	{
-		if (Input.GetKeyDown(KeyCode.K))
+		if (Input.GetKeyDown(KeyCode.K) || Input.GetButtonDown("L1"))
 		{
 			item_generator_.GetComponent<ItemGenerator>().SelectItem_Left();
 		}
 
-		if (Input.GetKeyDown(KeyCode.L))
+		if (Input.GetKeyDown(KeyCode.L) || Input.GetButtonDown("R1"))
 		{
 			item_generator_.GetComponent<ItemGenerator>().SelectItem_Right();
 		}
@@ -331,12 +332,12 @@ public class CameraController : MonoBehaviour
 
 	void SetTimer()
 	{
-		if (Input.GetKey(KeyCode.A))
+		if (Input.GetKey(KeyCode.A) || (Input.GetAxis("LStick_X") < -STICK_SENSITIVITY))
 		{
 			timer_camera_.GetComponent<TimerCameraController>().DownTimerCount();
 		}
 
-		if (Input.GetKey(KeyCode.D))
+		if (Input.GetKey(KeyCode.D) || (Input.GetAxis("LStick_X") > STICK_SENSITIVITY))
 		{
 			timer_camera_.GetComponent<TimerCameraController>().UpTimerCount();
 		}
