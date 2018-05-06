@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
 
@@ -191,37 +192,44 @@ public class CameraController : MonoBehaviour
 
 	void Translation()
 	{
-		if (Input.GetKey(KeyCode.A))
+		const float STICK_SENSITIVITY = 0.0001f;
+		const float MAX_SPEED = 0.3f;
+
+		Vector3 temp_vector = new Vector3(0.0f, 0.0f, 0.0f);
+
+		if (Input.GetKey(KeyCode.A) || (Input.GetAxis("Horizontal") < -STICK_SENSITIVITY))
 		{
-			// Y座標は固定
-			float temp_y = transform.position.y;
-			transform.Translate(-TRANSLATION_SPEED, 0.0f, 0.0f);
-			transform.position = new Vector3(transform.position.x, temp_y, transform.position.z);
+			temp_vector.x = -1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.D))
+		if (Input.GetKey(KeyCode.D) || (Input.GetAxis("Horizontal") > STICK_SENSITIVITY))
 		{
-			// Y座標は固定
-			float temp_y = transform.position.y;
-			transform.Translate(TRANSLATION_SPEED, 0.0f, 0.0f);
-			transform.position = new Vector3(transform.position.x, temp_y, transform.position.z);
+			temp_vector.x = 1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.W))
+		if (Input.GetKey(KeyCode.W) || (Input.GetAxis("Vertical") > STICK_SENSITIVITY))
 		{
-			// Y座標は固定
-			float temp_y = transform.position.y;
-			transform.Translate(0.0f, 0.0f, TRANSLATION_SPEED);
-			transform.position = new Vector3(transform.position.x, temp_y, transform.position.z);
+			temp_vector.z = 1.0f;
 		}
 
-		if (Input.GetKey(KeyCode.S))
+		if (Input.GetKey(KeyCode.S) || (Input.GetAxis("Vertical") < -STICK_SENSITIVITY))
 		{
-			// Y座標は固定
-			float temp_y = transform.position.y;
-			transform.Translate(0.0f, 0.0f, -TRANSLATION_SPEED);
-			transform.position = new Vector3(transform.position.x, temp_y, transform.position.z);
+			temp_vector.z = -1.0f;
+
+			
+			
 		}
+
+		// 速度ベクトルの調整
+		temp_vector.Normalize();
+		float proportion = (Mathf.Abs(Input.GetAxis("Vertical")) > Mathf.Abs(Input.GetAxis("Horizontal"))? 
+							Mathf.Abs(Input.GetAxis("Vertical")) : Mathf.Abs(Input.GetAxis("Horizontal")));
+		temp_vector = temp_vector * MAX_SPEED * proportion ;
+
+		// Y座標は固定
+		float temp_y = transform.position.y;
+		transform.Translate(temp_vector.x, 0.0f, temp_vector.z);
+		transform.position = new Vector3(transform.position.x, temp_y, transform.position.z);
 	}
 
 
