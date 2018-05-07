@@ -220,6 +220,9 @@ public class CameraController : MonoBehaviour
 		temp_vector.Normalize();
 		float proportion = (Mathf.Abs(Input.GetAxis("LStick_Z")) > Mathf.Abs(Input.GetAxis("LStick_X"))? 
 							Mathf.Abs(Input.GetAxis("LStick_Z")) : Mathf.Abs(Input.GetAxis("LStick_X")));
+
+		proportion = 1.0f;	// キーボードを使う場合のみ使用
+
 		temp_vector = temp_vector * TRANSLATION_SPEED * proportion ;
 
 		// Y座標は固定
@@ -243,7 +246,7 @@ public class CameraController : MonoBehaviour
 						   (Mathf.Abs(Input.GetAxis("RStick_Z")) > Mathf.Abs(Input.GetAxis("RStick_X"))? 
 							Mathf.Abs(Input.GetAxis("RStick_Z")) : Mathf.Abs(Input.GetAxis("RStick_X")));
 		
-
+		temp_speed = ROTATE_SPEED;	// キーボードを使う場合のみ使用
 
 		if (Input.GetKey(KeyCode.Q) || (Input.GetAxis("RStick_X") < -STICK_SENSITIVITY))
 		{
