@@ -61,9 +61,13 @@
      <Compile Include="Assets\GameScene\Script\Billboard.cs" />
      <Compile Include="Assets\GameScene\Script\CameraController.cs" />
      <Compile Include="Assets\GameScene\Script\GameDirector.cs" />
+     <Compile Include="Assets\GameScene\Script\GamePad.cs" />
      <Compile Include="Assets\GameScene\Script\ItemGenerator.cs" />
      <Compile Include="Assets\GameScene\Script\ItemTileController.cs" />
      <Compile Include="Assets\GameScene\Script\TimerCameraController.cs" />
+ <Reference Include="Vuforia.UnityExtensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Runtime/Vuforia.UnityExtensions.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
